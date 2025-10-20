@@ -59,8 +59,17 @@ async def download_songs_async(prefix=""):
 
     print("\n✅ All downloads complete!")
 
+    q = input("Want to clear download list? (y | n): ")
+    
+    if q.lower() == 'y':
+        download_list.drop(download_list.index, inplace=True)
+        download_list.to_csv("./download_list.csv", index=False)
+        print("✅ Download list cleared!")
+
+
 def download_songs(prefix=""):
     asyncio.run(download_songs_async(prefix))
+ 
 
 if __name__ == "__main__":
     download_songs("test")

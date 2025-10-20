@@ -5,7 +5,16 @@ import pandas as pd
 from controllers.preprocess.data import merged_data
 
 def songs(path='../../data', query='all'):
-    files = [file for file in os.listdir(path) if file.endswith(".mp3")]
+    try:
+        valid_path = os.listdir(path)
+    except FileNotFoundError:
+        return "Path not found 🤷 creata a data folder in root dir"
+    
+    files = []
+    for file in valid_path:
+        if file.endswith(".mp3"):
+            files.append(file)
+    
     df = merged_data(files)
     if query == 'all':
         return df.reset_index(drop=True)

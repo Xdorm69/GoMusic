@@ -152,9 +152,9 @@ def download_songs_handler():
         console.print("No prefix operation")
         logger.info("Skipped prefix removal")
 
-    download_songs(prefix)
     logger.info(f"Download started with prefix '{prefix}'")
     console.print("Download started 🎵")
+    download_songs(prefix)
 
 def run():
     options = ['view songs', 'view stats', 'view artists', 'download songs']
