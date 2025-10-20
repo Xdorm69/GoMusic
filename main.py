@@ -23,13 +23,17 @@ def print_dict(dic, title="Statistics"):
     logger.info(f"Displayed dictionary with {len(dic)} entries")
 
 def handle_query():
-    console.print("\nQuery should be an artist name or language (punjabi, haryanvi, hindi).")
+    console.print("\nQuery should be an artist name or language (punjabi, haryanvi, hindi)\nSpeacially 'unmatched' can be written to see unmatched songs.")
     q = input("Enter query (press Enter for default 'all'): ").strip()
     logger.info(f"User entered query: '{q}'")
 
     if q == "":
         logger.info("Default query selected: 'all'")
         return "all"
+
+    elif q == 'unmatched':
+        logger.info("Default query selected: 'unmatched'")
+        return 'unmatched'
 
     q_lower = q.lower()
     valid_langs = {'punjabi', 'haryanvi', 'hindi'}

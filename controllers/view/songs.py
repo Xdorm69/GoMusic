@@ -25,6 +25,8 @@ def songs(path='../../data', query='all'):
 
     if query == 'all':
         return df.reset_index(drop=True)
+    elif query == 'unmatched':
+        return df[df['language'].isna()].reset_index(drop=True)
     elif query == 'punjabi':
         return df[df['language'] == 'punjabi'].reset_index(drop=True)
     elif query == 'haryanvi':

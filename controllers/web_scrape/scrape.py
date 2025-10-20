@@ -29,6 +29,8 @@ def search_youtube_songs(artist_name, language):
             continue
 
         clean = clean_title(title)
+        if('best of' in clean.lower() or 'top' in clean.lower()):
+            continue
 
         # Skip if in exclude list
         if clean.lower() in seen_titles:
