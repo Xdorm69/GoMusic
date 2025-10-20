@@ -8,12 +8,19 @@ def songs(path='../../data', query='all'):
     try:
         valid_path = os.listdir(path)
     except FileNotFoundError:
-        return "Path not found 🤷 creata a data folder in root dir"
+        os.makedirs(path)
+        valid_path = os.listdir(path)
+        print('file created no songs yet, add existing data to ./data dir')
+        return;
     
     files = []
     for file in valid_path:
         if file.endswith(".mp3"):
             files.append(file)
+    
+    if(not files):
+        print('No songs found in the directory')
+        return;
     
     df = merged_data(files)
     if query == 'all':
