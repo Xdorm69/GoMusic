@@ -1,7 +1,11 @@
+from re import L
+from controllers.download.clear_downloads import clear_downloads
+from controllers.download.copy_downloads import copy_downloads
 from controllers.download.download import download_songs
 from controllers.preprocess.remove_prefixes import remove_prefixes
 from controllers.view.stats import stats
 from controllers.view.songs import songs
+from controllers.web_scrape.scrape import search_youtube_songs
 from services.logger import logger
 from services.ui import console, show_table
 
@@ -47,6 +51,10 @@ def view_songs():
     songs_data = songs('./data', query)
     
     # Handle case when query returns a string message
+    if (songs_data is None):
+        console.print("No songs found in dir")
+        return
+
     if isinstance(songs_data, str):
         console.print(songs_data)
         logger.warning(f"Songs query returned message: {songs_data}")
@@ -64,6 +72,10 @@ def view_songs():
 
 def view_stats():
     all_songs = songs('./data', 'all')
+
+    if (all_songs is None):
+        console.print("No songs found in dir for analysis")
+        return
 
     # Handle string messages returned by songs()
     if isinstance(all_songs, str):
@@ -156,8 +168,26 @@ def download_songs_handler():
     console.print("Download started 🎵")
     download_songs(prefix)
 
+    copy = input("Want to copy downloads folder to data folder? (y | n): ")
+    if(copy.lower() == 'y'):
+        copy_downloads()
+        
+    clear = input("Want to clear downloads folder? (y | n): ")
+    if(clear.lower() == 'y'):
+        clear_downloads()
+
+def handle_scrape():
+    i = input("Enter artist name or album you want to scrape: ")
+    l = input("Enter language: ")
+    search_youtube_songs(i, l)
+    c = input("Want to copy scraped result to download_list.csv? (y | n): ")
+    if(c.lower() == 'y'):
+        df = pd.read_csv('./youtube_songs.csv')
+        df.to_csv('./download_list.csv', index=False)
+        console.print("Scraped result copied to download_list.csv")
+
 def run():
-    options = ['view songs', 'view stats', 'view artists', 'download songs']
+    options = ['view songs', 'view stats', 'view artists', 'download songs', 'scrape']
     console.print("Welcome to GoMusic 🎵", style="")
     console.print("Select an option index eg: 0, 1, 2 etc")
 
@@ -182,6 +212,8 @@ def run():
             view_artists()
         case 3:
             download_songs_handler()
+        case 4:
+            handle_scrape()
         case _:
             console.print("Invalid option")
             logger.warning(f"Option out of range: {i}")

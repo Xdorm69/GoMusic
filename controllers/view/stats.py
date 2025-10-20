@@ -3,6 +3,10 @@ from controllers.preprocess.data import merged_data
 
 def stats(songs_list):
     df = merged_data(songs_list)
+    
+    if(df is None):
+        print("No songs found in dir for analysis")
+        return
 
     # Summary stats
     total_matched = len(df[df['language'].notna()])

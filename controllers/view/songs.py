@@ -18,11 +18,11 @@ def songs(path='../../data', query='all'):
         if file.endswith(".mp3"):
             files.append(file)
     
-    if(not files):
-        print('No songs found in the directory')
-        return;
+    if(len(files) == 0):
+        return None
     
     df = merged_data(files)
+
     if query == 'all':
         return df.reset_index(drop=True)
     elif query == 'punjabi':
@@ -35,13 +35,10 @@ def songs(path='../../data', query='all'):
         q_lower = query.lower()
         artists = pd.read_csv('./constants/artists.csv')
         artists_list = artists['artist'].str.lower().tolist()
-        if q_lower not in artists_list:
-            return "Query not found 🤷"
-
-        main = df[df['artist'].str.lower() == q_lower].reset_index(drop=True)
-
-        if(not len(main)): 
-            return "No songs found for this artist 🤷"
-            
-        return main
+        if q_lower in artists_list:
+            main = df[df['artist'].str.lower() == q_lower].reset_index(drop=True)
+            if(not len(main)): 
+                return "No songs found for this artist 🤷"
+            return main            
+        return "Query not found 🤷"
         

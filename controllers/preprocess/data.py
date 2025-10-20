@@ -34,6 +34,9 @@ def get_language(artist_name):
 
 
 def merged_data(songs_list):
+    if(songs_list is None):
+        return None 
+
     df = pd.DataFrame(songs_list, columns=['title'])
 
     # Apply functions
